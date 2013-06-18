@@ -14,7 +14,6 @@
 @interface MAFunctionsListViewController () <iCarouselDataSource, iCarouselDelegate>
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
-
 @property (strong, nonatomic) IBOutlet iCarousel *carousel;
 
 @property (strong, nonatomic) NSMutableArray* functions;
@@ -31,7 +30,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
-    self.carousel.type = iCarouselTypeWheel;
+    self.carousel.type = iCarouselTypeCoverFlow;
+//    self.carousel.vertical = YES;
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,9 +57,10 @@
     //create new view if no view is available for recycling
     if (!view)
     {
-        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 240.0f, 380.0f)];
+        
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
-        view.contentMode = UIViewContentModeCenter;
+        view.contentMode = UIViewContentModeScaleAspectFill;
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
@@ -76,16 +78,23 @@
     return view;
 }
 
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
+{
+    return 200.f;
+}
 
 #pragma mark - iCarousel Delegate methods
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    
-    MAGraphViewController* graphVC = [[MAGraphViewController alloc] initWithNibName:@"MAGraphViewController" bundle:nil];
-    
-    [graphVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    [self presentViewController:graphVC animated:YES completion:nil];
+    if(carousel.decelerating == NO){
+        
+        MAGraphViewController* graphVC = [[MAGraphViewController alloc] initWithNibName:@"MAGraphViewController" bundle:nil];
+        graphVC.functionString = self.functions[index];
+        
+        [graphVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        [self presentViewController:graphVC animated:YES completion:nil];
+    }
 }
 
 

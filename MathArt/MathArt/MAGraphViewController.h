@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MAGraphViewController : UIViewController
-
+@property (nonatomic, copy) NSString* functionString;
 @end

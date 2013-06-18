@@ -12,7 +12,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[UIToolbar appearance] setTintColor:[[UIColor lightGrayColor] colorWithAlphaComponent:0.4f]];
+    
+    UIToolbar* toolbarAppearance = [UIToolbar appearance];
+    [toolbarAppearance setTintColor:[UIColor colorWithWhite:0.563 alpha:1.000]];
+    
     return YES;
 }
 							

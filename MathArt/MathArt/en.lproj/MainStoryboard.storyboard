@@ -13,7 +13,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBY-Gc-HLR" customClass="iCarousel">
-                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="zaM-zw-Fpb" id="nKY-ak-pq4"/>
                                     <outlet property="delegate" destination="zaM-zw-Fpb" id="sQi-r2-aDZ"/>
@@ -29,6 +29,7 @@
                                             <action selector="addFunction:" destination="zaM-zw-Fpb" id="Dld-5s-684"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="KJT-Vb-YqJ"/>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -52,6 +53,26 @@
             <point key="canvasLocation" x="425" y="58"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="MAFunctionsListViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MAFunctionsListViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="addFunction:"/>
+                <relationship kind="outlet" name="carousel" candidateClass="iCarousel"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="iCarousel" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/iCarousel.h"/>
+            <relationships>
+                <relationship kind="outlet" name="dataSource"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
