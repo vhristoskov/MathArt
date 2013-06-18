@@ -1,5 +1,5 @@
 //
-//  MAGraphViewController.h
+//  MAFunctionGraphViewController.h
 //  MathArt
 //
 //  Created by Victor Hristoskov on 6/18/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MAGraphViewController : UIViewController
+@interface MAFunctionGraphViewController : UIViewController
 @property (nonatomic, copy) NSString* functionString;
 @end

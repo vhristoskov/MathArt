@@ -9,7 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "iCarousel.h"
 #import "MAFunctionsListViewController.h"
-#import "MAGraphViewController.h"
+#import "MAFunctionGraphViewController.h"
 
 @interface MAFunctionsListViewController () <iCarouselDataSource, iCarouselDelegate>
 
@@ -89,7 +89,7 @@
 {
     if(carousel.decelerating == NO){
         
-        MAGraphViewController* graphVC = [[MAGraphViewController alloc] initWithNibName:@"MAGraphViewController" bundle:nil];
+        MAFunctionGraphViewController* graphVC = [[MAFunctionGraphViewController alloc] initWithNibName:@"MAFunctionGraphViewController" bundle:nil];
         graphVC.functionString = self.functions[index];
         
         [graphVC setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
