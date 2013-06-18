@@ -1,0 +1,6 @@
+[submodule "External/DDMathParser"]
+	path = External/DDMathParser
+	url = https://github.com/davedelong/DDMathParser.git
+[submodule "External/iCarousel"]
+	path = External/iCarousel
+	url = https://github.com/nicklockwood/iCarousel.git
