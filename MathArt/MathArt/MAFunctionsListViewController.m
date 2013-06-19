@@ -10,8 +10,9 @@
 #import "iCarousel.h"
 #import "MAFunctionsListViewController.h"
 #import "MAFunctionGraphViewController.h"
+#import "MACarouselItemView.h"
 
-@interface MAFunctionsListViewController () <iCarouselDataSource, iCarouselDelegate>
+@interface MAFunctionsListViewController () <iCarouselDataSource, iCarouselDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet iCarousel *carousel;
@@ -52,31 +53,26 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    UILabel *label = nil;
-    
     //create new view if no view is available for recycling
-    if (!view)
-    {
-        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 240.0f, 380.0f)];
-        
-        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
-        view.contentMode = UIViewContentModeScaleAspectFill;
-        label = [[UILabel alloc] initWithFrame:view.bounds];
-        label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:22.f];
-        label.tag = 1;
-        [view addSubview:label];
-    }
-    else
-    {
-        //get a reference to the label in the recycled view
-        label = (UILabel *)[view viewWithTag:1];
-    }
-    label.text = self.functions[index];
     
-    return view;
+    MACarouselItemView* carouselItemView = (MACarouselItemView*)view;
+    if (!carouselItemView)
+    {
+        
+        carouselItemView = [[NSBundle mainBundle] loadNibNamed:@"MACarouselItemView" owner:self options:nil][0];
+        [carouselItemView.deleteButton addTarget:self action:@selector (removeFunctionItem:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [carouselItemView.editButton addTarget:self action:@selector (editFunctionItem:) forControlEvents:UIControlEventTouchUpInside];
+        carouselItemView.functionTextField.delegate = self;
+        carouselItemView.functionTextField.userInteractionEnabled = NO;
+    }
+    
+    carouselItemView.functionTextField.text = self.functions[index];
+    carouselItemView.functionTextField.tag = index;
+    
+    return carouselItemView;
 }
+
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 {
@@ -100,10 +96,63 @@
 
 #pragma mark - Action methods
 
-- (IBAction)addFunction:(id)sender {
+- (IBAction)addFunctionItem:(id)sender {
     NSInteger index = MAX(0, self.carousel.currentItemIndex);
     [self.functions insertObject:@"f(x) + g(xs)" atIndex:index];
     [self.carousel insertItemAtIndex:index animated:YES];
 }
+
+- (IBAction)removeFunctionItem:(id)sender
+{
+    if (self.carousel.numberOfItems > 0)
+    {
+        NSInteger index = self.carousel.currentItemIndex;
+        [self.carousel removeItemAtIndex:index animated:YES];
+        [self.functions removeObjectAtIndex:index];
+    }
+}
+
+- (IBAction)editFunctionItem:(id)sender
+{
+    MACarouselItemView* carouselItemView = (MACarouselItemView*)((UIButton*)sender).superview;
+    
+    carouselItemView.functionTextField.userInteractionEnabled = YES;
+    [carouselItemView.functionTextField becomeFirstResponder];
+    self.carousel.scrollEnabled = NO;
+}
+
+
+#pragma mark - UITextField Delegate methods
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    CGSize offset = CGSizeMake(0.0f, 90.f);
+    [UIView animateWithDuration:0.25f animations:^{
+        self.carousel.viewpointOffset = offset;
+    }];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.functions[textField.tag] = textField.text;
+    MACarouselItemView* carouselItemView = (MACarouselItemView*)textField.superview;
+    carouselItemView.functionTextField.userInteractionEnabled = NO;
+    
+    CGSize offset = CGSizeMake(0.0f, 0.f);
+    [UIView animateWithDuration:0.5f animations:^{
+        self.carousel.viewpointOffset = offset;
+    }completion:^(BOOL finished) {
+        if(finished){
+            self.carousel.scrollEnabled = YES;
+        }
+    } ];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return  YES;
+}
+
 
 @end

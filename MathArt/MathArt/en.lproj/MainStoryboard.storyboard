@@ -26,7 +26,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="nP5-nP-rzp"/>
                                     <barButtonItem style="plain" systemItem="add" id="nz2-vA-yvo">
                                         <connections>
-                                            <action selector="addFunction:" destination="zaM-zw-Fpb" id="Dld-5s-684"/>
+                                            <action selector="addFunctionItem:" destination="zaM-zw-Fpb" id="ags-5r-cgQ"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="KJT-Vb-YqJ"/>

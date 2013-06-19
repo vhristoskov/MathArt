@@ -20,6 +20,10 @@
 		3E6E94D9176F6EF90069E732 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E6E94D8176F6EF90069E732 /* Default-568h@2x.png */; };
 		3E6E94DC176F6EF90069E732 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6E94DA176F6EF90069E732 /* MainStoryboard.storyboard */; };
 		3E6E94DF176F6EF90069E732 /* MAFunctionsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E6E94DE176F6EF90069E732 /* MAFunctionsListViewController.m */; };
+		3EA3D6081771ED4500F20450 /* MACarouselItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA3D6071771ED4500F20450 /* MACarouselItemView.m */; };
+		3EA3D60A1771ED5D00F20450 /* MACarouselItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D6091771ED5D00F20450 /* MACarouselItemView.xib */; };
+		3EA3D6101771F84C00F20450 /* TRASH - EMPTY.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D60F1771F84C00F20450 /* TRASH - EMPTY.png */; };
+		3EA3D6121772040E00F20450 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D6111772040D00F20450 /* checkmark.png */; };
 		3EA67698177084DA00049B48 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA67697177084DA00049B48 /* iCarousel.m */; };
 		3EA676C7177084EB00049B48 /* _DDFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6769B177084EB00049B48 /* _DDFunctionContainer.m */; };
 		3EA676C8177084EB00049B48 /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6769D177084EB00049B48 /* _DDFunctionExpression.m */; };
@@ -147,6 +151,11 @@
 		3E6E94DB176F6EF90069E732 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3E6E94DD176F6EF90069E732 /* MAFunctionsListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAFunctionsListViewController.h; sourceTree = "<group>"; };
 		3E6E94DE176F6EF90069E732 /* MAFunctionsListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAFunctionsListViewController.m; sourceTree = "<group>"; };
+		3EA3D6061771ED4500F20450 /* MACarouselItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MACarouselItemView.h; sourceTree = "<group>"; };
+		3EA3D6071771ED4500F20450 /* MACarouselItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MACarouselItemView.m; sourceTree = "<group>"; };
+		3EA3D6091771ED5D00F20450 /* MACarouselItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MACarouselItemView.xib; sourceTree = "<group>"; };
+		3EA3D60F1771F84C00F20450 /* TRASH - EMPTY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TRASH - EMPTY.png"; sourceTree = "<group>"; };
+		3EA3D6111772040D00F20450 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
 		3EA67696177084DA00049B48 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		3EA67697177084DA00049B48 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		3EA6769A177084EB00049B48 /* _DDFunctionContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionContainer.h; sourceTree = "<group>"; };
@@ -356,9 +365,10 @@
 		3E6E94C8176F6EF90069E732 /* MathArt */ = {
 			isa = PBXGroup;
 			children = (
+				3EA67694177084B500049B48 /* External Libraries */,
 				3E6E94D1176F6EF90069E732 /* MAAppDelegate.h */,
 				3E6E94D2176F6EF90069E732 /* MAAppDelegate.m */,
-				3EA67694177084B500049B48 /* External Libraries */,
+				3EA3D6051771ED1500F20450 /* Views */,
 				3E6E94E8176F721F0069E732 /* Controllers  */,
 				3E6E94C9176F6EF90069E732 /* Supporting Files */,
 			);
@@ -380,12 +390,22 @@
 		3E6E94E8176F721F0069E732 /* Controllers  */ = {
 			isa = PBXGroup;
 			children = (
+				3E6E94DA176F6EF90069E732 /* MainStoryboard.storyboard */,
 				3E6E94DD176F6EF90069E732 /* MAFunctionsListViewController.h */,
 				3E6E94DE176F6EF90069E732 /* MAFunctionsListViewController.m */,
-				3E6E94DA176F6EF90069E732 /* MainStoryboard.storyboard */,
 				3E0DB6ED1770E11300AC0104 /* Function Graph */,
 			);
 			name = "Controllers ";
+			sourceTree = "<group>";
+		};
+		3EA3D6051771ED1500F20450 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3EA3D6061771ED4500F20450 /* MACarouselItemView.h */,
+				3EA3D6071771ED4500F20450 /* MACarouselItemView.m */,
+				3EA3D6091771ED5D00F20450 /* MACarouselItemView.xib */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		3EA67694177084B500049B48 /* External Libraries */ = {
@@ -464,6 +484,8 @@
 		3EA676DE17709AB200049B48 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3EA3D6111772040D00F20450 /* checkmark.png */,
+				3EA3D60F1771F84C00F20450 /* TRASH - EMPTY.png */,
 				3EA676DF17709AC100049B48 /* background.png */,
 				3EA676E017709AC100049B48 /* page.png */,
 				3E6E94D4176F6EF90069E732 /* Default.png */,
@@ -533,6 +555,9 @@
 				3EA676E117709AC100049B48 /* background.png in Resources */,
 				3EA676E217709AC100049B48 /* page.png in Resources */,
 				3EA676E717709C9200049B48 /* MAFunctionGraphViewController.xib in Resources */,
+				3EA3D60A1771ED5D00F20450 /* MACarouselItemView.xib in Resources */,
+				3EA3D6101771F84C00F20450 /* TRASH - EMPTY.png in Resources */,
+				3EA3D6121772040E00F20450 /* checkmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -570,6 +595,7 @@
 				3EA676DB177084EB00049B48 /* NSString+DDMathParsing.m in Sources */,
 				3EA676E617709C9200049B48 /* MAFunctionGraphViewController.m in Sources */,
 				3E0DB6EB1770E05A00AC0104 /* MAFunctionScatterPlot.m in Sources */,
+				3EA3D6081771ED4500F20450 /* MACarouselItemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
