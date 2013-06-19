@@ -87,7 +87,7 @@
 
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    if(carousel.decelerating == NO){
+    if(carousel.decelerating == NO && index == carousel.currentItemIndex){
         
         MAFunctionGraphViewController* graphVC = [[MAFunctionGraphViewController alloc] initWithNibName:@"MAFunctionGraphViewController" bundle:nil];
         graphVC.functionString = self.functions[index];

@@ -17,7 +17,6 @@
 @property (nonatomic, strong) CPTXYGraph* graph;
 @property (nonatomic, weak) id<CPTScatterPlotDataSource> datasource;
 
-- (id)initWithHostingView:(CPTGraphHostingView *)hostingView payoffPlotData:(NSMutableArray *)payoffData payoffPoint:(CGPoint)payoffPoint;
 - (id)initWithHostingView:(CPTGraphHostingView *)hostingView datasource:(id<CPTScatterPlotDataSource>)datasource;
 
 - (void)initialisePlot;

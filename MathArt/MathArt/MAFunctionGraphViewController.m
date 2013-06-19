@@ -14,11 +14,12 @@ static const NSInteger kDefaultVariableVal = 5;
 
 @interface MAFunctionGraphViewController () <CPTScatterPlotDataSource>
 @property (strong, nonatomic) NSRegularExpression* regex;
-@property (strong, nonatomic) NSArray* xAxisLabels;
-@property (strong, nonatomic) NSArray* yAxisLabels;
+//@property (strong, nonatomic) NSArray* xAxisLabels;
+//@property (strong, nonatomic) NSMutableArray* yAxisLabels;
 @property (strong, nonatomic) NSMutableArray* graphData;
-@property (strong, nonatomic) MAFunctionScatterPlot* functionScatterPlot;
+@property (strong, nonatomic) NSString* parsedFunctionString;
 
+@property (strong, nonatomic) MAFunctionScatterPlot* functionScatterPlot;
 @property (strong, nonatomic) IBOutlet CPTGraphHostingView *graphHostingView;
 @property (strong, nonatomic) IBOutlet UILabel *functionLabel;
 @end
@@ -40,14 +41,12 @@ static const NSInteger kDefaultVariableVal = 5;
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
 
     self.functionLabel.text = self.functionString;
-    
-    NSString* functionResult = [[self evaluateFunctionString:self.functionString] stringValue];
-    NSLog(@"%@", functionResult);
+    self.parsedFunctionString = [self parseFunctionString:self.functionString];
     
     [self initializeGraphData];
     self.functionScatterPlot = [[MAFunctionScatterPlot alloc] initWithHostingView:self.graphHostingView datasource:self];
-    self.functionScatterPlot.xAxisLabels = self.xAxisLabels;
-    self.functionScatterPlot.yAxisLabels = self.yAxisLabels;
+//    self.functionScatterPlot.xAxisLabels = self.xAxisLabels;
+//    self.functionScatterPlot.yAxisLabels = self.yAxisLabels;
     [self.functionScatterPlot initialisePlot];
 }
 
@@ -97,19 +96,30 @@ static const NSInteger kDefaultVariableVal = 5;
 - (void)initializeGraphData{
     
     //Graph Data initialization
-    self.graphData = [NSMutableArray array];
-    [self.graphData addObject:[NSValue valueWithCGPoint:CGPointMake(.0f, .0f)]];
-
-    [self.graphData addObject:[NSValue valueWithCGPoint:CGPointMake(1.0f, 1.5f)]];
-    [self.graphData addObject:[NSValue valueWithCGPoint:CGPointMake(3.2f, 3.3f)]];
+    self.graphData = [NSMutableArray arrayWithCapacity:10];
+//    [self.graphData addObject:[NSValue valueWithCGPoint:CGPointMake(.0f, .0f)]];
+  
+    NSMutableDictionary* argsDict = [self variablesOfFunction:self.functionString withRegex:self.regex];
+    
     
     //Axis Data initialization
-    self.xAxisLabels = @[@"1", @"2", @"3", @"4", @"5", @"6"];
-    self.yAxisLabels = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"];
+//    self.xAxisLabels = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10"];
+//    self.yAxisLabels = [NSMutableArray arrayWithCapacity:10];
+    
+    for (int xAxisVal = kXAxisMinValue; xAxisVal <= kXAxisMaxValue; ++xAxisVal) {
+        
+        for (NSString* variable in [argsDict allKeys]) {
+            argsDict[variable] = @(xAxisVal);
+        }
+        NSNumber* yVal = [self evaluateParsedString:self.parsedFunctionString withArgValues:argsDict];
+//        [self.yAxisLabels addObject:[yVal stringValue]];
+        [self.graphData addObject:[NSValue valueWithCGPoint:CGPointMake(xAxisVal, [yVal doubleValue])]];
+    }
+
+    
 }
 
-
-- (NSNumber*)evaluateFunctionString:(NSString*)functionStr
+- (NSString*)parseFunctionString:(NSString*)functionStr
 {
     NSError* error = nil;
     self.regex = [[NSRegularExpression alloc] initWithPattern:@"([a-z])" options:NSRegularExpressionCaseInsensitive error:&error];
@@ -117,11 +127,15 @@ static const NSInteger kDefaultVariableVal = 5;
         NSLog(@"Regex initialization error: %@", [error localizedDescription]);
     }
     
-    NSDictionary* argsDict = [self variablesOfFunction:functionStr withRegex:self.regex];
     NSString* parsedString = [self.regex stringByReplacingMatchesInString:functionStr options:0 range:NSMakeRange(0, functionStr.length) withTemplate:@"$$1"];
-    
-    error = nil;
-    NSNumber* result = [parsedString numberByEvaluatingStringWithSubstitutions:argsDict error:&error];
+    return parsedString;
+}
+
+
+- (NSNumber*)evaluateParsedString:(NSString*)parsedString withArgValues:(NSDictionary*)argValues
+{
+    NSError* error = nil;
+    NSNumber* result = [parsedString numberByEvaluatingStringWithSubstitutions:argValues error:&error];
     
     if (error) {
         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Function evaluation problem" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -131,7 +145,7 @@ static const NSInteger kDefaultVariableVal = 5;
     return result;
 }
 
-- (NSDictionary*)variablesOfFunction:(NSString*)functionSting withRegex:(NSRegularExpression*)regex
+- (NSMutableDictionary*)variablesOfFunction:(NSString*)functionSting withRegex:(NSRegularExpression*)regex
 {
     __block NSMutableDictionary* args = nil;
     

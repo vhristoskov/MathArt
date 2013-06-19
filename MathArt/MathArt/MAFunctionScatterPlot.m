@@ -11,10 +11,9 @@
 @interface MAFunctionScatterPlot () <CPTScatterPlotDelegate>
 
 @property (nonatomic, strong) CPTGraphHostingView* hostingView;
-@property (nonatomic, strong) NSMutableArray* payoffPlotData;
+@property (nonatomic, strong) NSMutableArray* functionPlotData;
 @property (nonatomic, assign) CGPoint payoffPoint;
-@property (nonatomic, strong) CPTScatterPlot* payoffPlot;
-@property (nonatomic, strong) CPTScatterPlot* investmentPlot;
+@property (nonatomic, strong) CPTScatterPlot* functionPlot;
 @property (nonatomic, strong) CPTXYPlotSpace* plotSpace;
 
 @end
@@ -26,18 +25,6 @@
 
 // Initialise the scatter plot in the provided hosting view with the provided data.
 // The data array should contain NSValue objects each representing a CGPoint.
-- (id)initWithHostingView:(CPTGraphHostingView *)hostingView payoffPlotData:(NSMutableArray *)payoffData payoffPoint:(CGPoint)payoffPoint
-{
-    self = [super init];
-    if(self){
-        self.hostingView = hostingView;
-        self.payoffPlotData = payoffData;
-        self.payoffPoint = payoffPoint;
-        self.graph = nil;
-    }
-    return self;
-}
-
 - (id)initWithHostingView:(CPTGraphHostingView *)hostingView datasource:(id<CPTScatterPlotDataSource>)datasource
 {
     self = [super init];
@@ -86,6 +73,7 @@
     // Add some padding to the graph, with more at the bottom for axis labels.
     self.graph.plotAreaFrame.paddingBottom = kGraphPlotAreaFramePaddingBottom;
     self.graph.plotAreaFrame.paddingLeft = kGraphPlotAreaFramePaddingLeft;
+    self.graph.plotAreaFrame.paddingRight = kGraphPlotAreaFramePaddingRigth;
     
     // Setup the graph title
     CPTMutableTextStyle *titleStyle = [CPTMutableTextStyle textStyle];
@@ -107,27 +95,27 @@
 -(void)configurePlots
 {
     // Create a line style that we will apply to the payoff plot
-    CPTMutableLineStyle* payoffPlotLineStyle = [CPTMutableLineStyle lineStyle];
-    payoffPlotLineStyle.lineColor = [CPTColor colorWithComponentRed:0.7f green:0.7f blue:0.7f alpha:0.7f];
-    payoffPlotLineStyle.lineWidth = 1.f;
+    CPTMutableLineStyle* functionPlotLineStyle = [CPTMutableLineStyle lineStyle];
+    functionPlotLineStyle.lineColor = [CPTColor colorWithComponentRed:0.7f green:0.7f blue:0.7f alpha:0.7f];
+    functionPlotLineStyle.lineWidth = 1.f;
     
     // Create the plot symbol we're going to use.
     CPTPlotSymbol* plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    plotSymbol.lineStyle = payoffPlotLineStyle;
+    plotSymbol.lineStyle = functionPlotLineStyle;
     plotSymbol.size = CGSizeMake(8.0, 8.0);
     CPTColor* areaColor = [CPTColor colorWithComponentRed:0.7f green:0.7f blue:0.7f alpha:0.7f];
     CPTFill* areaFill = [CPTFill fillWithColor:areaColor];
     plotSymbol.fill = areaFill;
     
     // Add payoff Plot to the graph
-    self.payoffPlot = [[CPTScatterPlot alloc] init];
-    self.payoffPlot.identifier = kPayoffPlotName;
-    self.payoffPlot.dataSource = self.datasource;
-    self.payoffPlot.dataLineStyle = payoffPlotLineStyle;
-    self.payoffPlot.plotSymbol = plotSymbol;
-    self.payoffPlot.areaFill = areaFill;
-    self.payoffPlot.areaBaseValue = CPTDecimalFromString(@"0");
-    [self.graph addPlot:self.payoffPlot];
+    self.functionPlot = [[CPTScatterPlot alloc] init];
+    self.functionPlot.identifier = kPayoffPlotName;
+    self.functionPlot.dataSource = self.datasource;
+    self.functionPlot.dataLineStyle = functionPlotLineStyle;
+    self.functionPlot.plotSymbol = plotSymbol;
+    self.functionPlot.areaFill = areaFill;
+    self.functionPlot.areaBaseValue = CPTDecimalFromString(@"0");
+    [self.graph addPlot:self.functionPlot];
     
     
     // We modify the graph's plot space to setup the axis' min / max values.
@@ -161,73 +149,56 @@
     xAxis.majorTickLineStyle = gridLineStyle;
     xAxis.majorTickLength = kMajorTickLengthXAxis;
     xAxis.majorGridLineStyle = gridLineStyle;
-    xAxis.minorTicksPerInterval = 0;
+    xAxis.minorTickLineStyle = gridLineStyle;
+//    xAxis.minorGridLineStyle = gridLineStyle;
+//    xAxis.minorTicksPerInterval = 1;
     xAxis.tickDirection = CPTSignNegative;
     
     // xAxis Title configuration
     CPTMutableTextStyle *titleStyle = [CPTMutableTextStyle textStyle];
     titleStyle.color = [[CPTColor whiteColor] colorWithAlphaComponent:0.5f];
     titleStyle.fontName = kDefaultNormalFont;
-    titleStyle.fontSize = 12.0f;
+    titleStyle.fontSize = 15.0f;
     xAxis.titleTextStyle = titleStyle;
-    xAxis.titleLocation =  CPTDecimalFromDouble(self.plotSpace.xRange.maxLimitDouble - 0.5f);
-    xAxis.titleOffset = 25.f;
+    xAxis.titleLocation =  CPTDecimalFromDouble(self.plotSpace.xRange.maxLimitDouble);
+    xAxis.titleOffset = 10.f;
     xAxis.title = @"X";
 
-
     // xLabels configuration
-    xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    xAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     xAxis.labelTextStyle = textStyle;
-    NSMutableSet* xLabels = [[NSMutableSet alloc] initWithCapacity:self.xAxisLabels.count];
-    NSMutableSet* xLocations = [[NSMutableSet alloc] initWithCapacity:self.xAxisLabels.count];
-    int labelLocation = 0;
-    for (NSString* xLabel in self.xAxisLabels) {
-        CPTAxisLabel* label = [[CPTAxisLabel alloc] initWithText:xLabel textStyle:xAxis.labelTextStyle];
-        label.tickLocation = @(labelLocation + .5f).decimalValue;
-        label.offset = 2.f;
-        if(label){
-            [xLabels addObject:label];
-            [xLocations addObject:@(labelLocation)];
-        }
-        ++labelLocation;
-    }
-    xAxis.axisLabels = xLabels;
-    [xLocations addObject:@(labelLocation)];
-    xAxis.majorTickLocations = xLocations;
+    xAxis.majorIntervalLength = CPTDecimalFromFloat(2.0f);
+
     
     // yAxis Lines Configuration
     CPTAxis* yAxis = axisSet.yAxis;
+
     yAxis.axisLineStyle = gridLineStyle;
     yAxis.majorTickLineStyle = gridLineStyle;
     yAxis.majorTickLength = kMajorTickLengthYAxis;
     yAxis.majorGridLineStyle = gridLineStyle;
-    yAxis.minorTicksPerInterval = 0;
+    yAxis.minorTickLineStyle = gridLineStyle;
+//    yAxis.minorGridLineStyle = gridLineStyle;
+//    yAxis.minorTicksPerInterval = 1;
     yAxis.tickDirection = CPTSignNegative;
     
+    titleStyle.color = [[CPTColor whiteColor] colorWithAlphaComponent:0.5f];
+    titleStyle.fontName = kDefaultNormalFont;
+    titleStyle.fontSize = 15.0f;
+    yAxis.titleTextStyle = titleStyle;
+    yAxis.titleLocation =  CPTDecimalFromDouble(self.plotSpace.yRange.maxLimitDouble - 0.5f);
+    yAxis.titleOffset = 40.f;
+    yAxis.title = @"Y";
+    
     // yLabels configuration
-    yAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    yAxis.labelingPolicy = CPTAxisLabelingPolicyFixedInterval;
     yAxis.labelTextStyle = textStyle;
-    NSMutableSet* yLabels = [[NSMutableSet alloc] initWithCapacity:self.yAxisLabels.count];
-    NSMutableSet* yLocations = [[NSMutableSet alloc] initWithCapacity:self.yAxisLabels.count];
-    labelLocation = 0;
-    for (NSString* yLabel in self.yAxisLabels) {
-        CPTAxisLabel* label = [[CPTAxisLabel alloc] initWithText:yLabel textStyle:yAxis.labelTextStyle];
-        label.tickLocation = @(labelLocation + .5f).decimalValue;
-        label.offset = 6.f;
-        if(label){
-            [yLabels addObject:label];
-            [yLocations addObject:@(labelLocation)];
-        }
-        ++labelLocation;
-    }
-    yAxis.axisLabels = yLabels;
-    yAxis.majorTickLocations = yLocations;
+    yAxis.majorIntervalLength = CPTDecimalFromFloat(10.0f);
    
 }
 
 - (void)reloadData
 {
-    [self.payoffPlot reloadData];
-    [self.investmentPlot reloadData];
+    [self.functionPlot reloadData];
 }
 @end
