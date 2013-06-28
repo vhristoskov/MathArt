@@ -11,6 +11,10 @@
 #import "MAFunctionsListViewController.h"
 #import "MAFunctionGraphViewController.h"
 #import "MACarouselItemView.h"
+#import "MADataManager.h"
+
+
+static NSString* const kDefaultFuncion = @"x + 1";
 
 @interface MAFunctionsListViewController () <iCarouselDataSource, iCarouselDelegate, UITextFieldDelegate>
 
@@ -25,7 +29,14 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.functions = @[@"x ** 2", @"(x + 1) / 5", @"sin(6x)", @"arctg(a + x)", @"f - 1"].mutableCopy;
+    [[MADataManager sharedManager] functionsWithCompletion:^(NSArray *functions, NSError *error) {
+        if(!error){
+            self.functions = [NSMutableArray arrayWithArray:functions];
+            [self.carousel reloadData];
+        }else{
+            NSLog(@"Error while reading the functions %@", error.localizedDescription);
+        }
+    }];
 }
 
 - (void)viewDidLoad
@@ -53,8 +64,6 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    //create new view if no view is available for recycling
-    
     MACarouselItemView* carouselItemView = (MACarouselItemView*)view;
     if (!carouselItemView)
     {
@@ -68,16 +77,14 @@
     }
     
     carouselItemView.functionTextField.text = self.functions[index];
-    carouselItemView.functionTextField.tag = index;
-    
     return carouselItemView;
 }
-
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 {
     return 200.f;
 }
+
 
 #pragma mark - iCarousel Delegate methods
 
@@ -98,8 +105,10 @@
 
 - (IBAction)addFunctionItem:(id)sender {
     NSInteger index = MAX(0, self.carousel.currentItemIndex);
-    [self.functions insertObject:@"f(x) + g(xs)" atIndex:index];
+    [self.functions insertObject:kDefaultFuncion atIndex:index];
     [self.carousel insertItemAtIndex:index animated:YES];
+    
+    [[MADataManager sharedManager] updateFunctionsWithArray:self.functions completion:nil];
 }
 
 - (IBAction)removeFunctionItem:(id)sender
@@ -109,6 +118,7 @@
         NSInteger index = self.carousel.currentItemIndex;
         [self.carousel removeItemAtIndex:index animated:YES];
         [self.functions removeObjectAtIndex:index];
+        [[MADataManager sharedManager] updateFunctionsWithArray:self.functions completion:nil];
     }
 }
 
@@ -134,10 +144,13 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.functions[textField.tag] = textField.text;
     MACarouselItemView* carouselItemView = (MACarouselItemView*)textField.superview;
     carouselItemView.functionTextField.userInteractionEnabled = NO;
-    
+        
+    NSInteger index = self.carousel.currentItemIndex;
+    self.functions[index] = textField.text;
+    [[MADataManager sharedManager] updateFunctionsWithArray:self.functions completion:nil];
+
     CGSize offset = CGSizeMake(0.0f, 0.f);
     [UIView animateWithDuration:0.5f animations:^{
         self.carousel.viewpointOffset = offset;

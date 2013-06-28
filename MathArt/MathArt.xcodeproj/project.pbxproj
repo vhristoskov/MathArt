@@ -24,7 +24,9 @@
 		3EA3D60A1771ED5D00F20450 /* MACarouselItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D6091771ED5D00F20450 /* MACarouselItemView.xib */; };
 		3EA3D6101771F84C00F20450 /* TRASH - EMPTY.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D60F1771F84C00F20450 /* TRASH - EMPTY.png */; };
 		3EA3D6121772040E00F20450 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EA3D6111772040D00F20450 /* checkmark.png */; };
-		3EA67698177084DA00049B48 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA67697177084DA00049B48 /* iCarousel.m */; };
+		3EA4D97A177E046000FF2E19 /* defaultFunctions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EA4D979177E046000FF2E19 /* defaultFunctions.plist */; };
+		3EA4D97D177E04D500FF2E19 /* MADataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4D97C177E04D500FF2E19 /* MADataManager.m */; };
+		3EA4D980177E1CCF00FF2E19 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4D97F177E1CCF00FF2E19 /* iCarousel.m */; };
 		3EA676C7177084EB00049B48 /* _DDFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6769B177084EB00049B48 /* _DDFunctionContainer.m */; };
 		3EA676C8177084EB00049B48 /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6769D177084EB00049B48 /* _DDFunctionExpression.m */; };
 		3EA676C9177084EB00049B48 /* _DDFunctionTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6769F177084EB00049B48 /* _DDFunctionTerm.m */; };
@@ -156,8 +158,11 @@
 		3EA3D6091771ED5D00F20450 /* MACarouselItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MACarouselItemView.xib; sourceTree = "<group>"; };
 		3EA3D60F1771F84C00F20450 /* TRASH - EMPTY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TRASH - EMPTY.png"; sourceTree = "<group>"; };
 		3EA3D6111772040D00F20450 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
-		3EA67696177084DA00049B48 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
-		3EA67697177084DA00049B48 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		3EA4D979177E046000FF2E19 /* defaultFunctions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultFunctions.plist; sourceTree = "<group>"; };
+		3EA4D97B177E04D500FF2E19 /* MADataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADataManager.h; sourceTree = "<group>"; };
+		3EA4D97C177E04D500FF2E19 /* MADataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADataManager.m; sourceTree = "<group>"; };
+		3EA4D97E177E1CCF00FF2E19 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		3EA4D97F177E1CCF00FF2E19 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		3EA6769A177084EB00049B48 /* _DDFunctionContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionContainer.h; sourceTree = "<group>"; };
 		3EA6769B177084EB00049B48 /* _DDFunctionContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionContainer.m; sourceTree = "<group>"; };
 		3EA6769C177084EB00049B48 /* _DDFunctionExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionExpression.h; sourceTree = "<group>"; };
@@ -365,6 +370,7 @@
 		3E6E94C8176F6EF90069E732 /* MathArt */ = {
 			isa = PBXGroup;
 			children = (
+				3EA4D978177E040A00FF2E19 /* Data Manager */,
 				3EA67694177084B500049B48 /* External Libraries */,
 				3E6E94D1176F6EF90069E732 /* MAAppDelegate.h */,
 				3E6E94D2176F6EF90069E732 /* MAAppDelegate.m */,
@@ -383,6 +389,7 @@
 				3E6E94CB176F6EF90069E732 /* InfoPlist.strings */,
 				3E6E94CE176F6EF90069E732 /* main.m */,
 				3E6E94D0176F6EF90069E732 /* MathArt-Prefix.pch */,
+				3EA4D979177E046000FF2E19 /* defaultFunctions.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -408,24 +415,32 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		3EA4D978177E040A00FF2E19 /* Data Manager */ = {
+			isa = PBXGroup;
+			children = (
+				3EA4D97B177E04D500FF2E19 /* MADataManager.h */,
+				3EA4D97C177E04D500FF2E19 /* MADataManager.m */,
+			);
+			name = "Data Manager";
+			sourceTree = "<group>";
+		};
+		3EA4D981177E1CD400FF2E19 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				3EA4D97E177E1CCF00FF2E19 /* iCarousel.h */,
+				3EA4D97F177E1CCF00FF2E19 /* iCarousel.m */,
+			);
+			name = iCarousel;
+			sourceTree = "<group>";
+		};
 		3EA67694177084B500049B48 /* External Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3EA4D981177E1CD400FF2E19 /* iCarousel */,
 				3E0DB6E81770D6FB00AC0104 /* Core Plot */,
 				3EA67699177084EB00049B48 /* DDMathParser */,
-				3EA67695177084DA00049B48 /* iCarousel */,
 			);
 			name = "External Libraries";
-			sourceTree = "<group>";
-		};
-		3EA67695177084DA00049B48 /* iCarousel */ = {
-			isa = PBXGroup;
-			children = (
-				3EA67696177084DA00049B48 /* iCarousel.h */,
-				3EA67697177084DA00049B48 /* iCarousel.m */,
-			);
-			name = iCarousel;
-			path = ../../External/iCarousel/iCarousel;
 			sourceTree = "<group>";
 		};
 		3EA67699177084EB00049B48 /* DDMathParser */ = {
@@ -558,6 +573,7 @@
 				3EA3D60A1771ED5D00F20450 /* MACarouselItemView.xib in Resources */,
 				3EA3D6101771F84C00F20450 /* TRASH - EMPTY.png in Resources */,
 				3EA3D6121772040E00F20450 /* checkmark.png in Resources */,
+				3EA4D97A177E046000FF2E19 /* defaultFunctions.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,7 +587,6 @@
 				3E6E94CF176F6EF90069E732 /* main.m in Sources */,
 				3E6E94D3176F6EF90069E732 /* MAAppDelegate.m in Sources */,
 				3E6E94DF176F6EF90069E732 /* MAFunctionsListViewController.m in Sources */,
-				3EA67698177084DA00049B48 /* iCarousel.m in Sources */,
 				3EA676C7177084EB00049B48 /* _DDFunctionContainer.m in Sources */,
 				3EA676C8177084EB00049B48 /* _DDFunctionExpression.m in Sources */,
 				3EA676C9177084EB00049B48 /* _DDFunctionTerm.m in Sources */,
@@ -596,6 +611,8 @@
 				3EA676E617709C9200049B48 /* MAFunctionGraphViewController.m in Sources */,
 				3E0DB6EB1770E05A00AC0104 /* MAFunctionScatterPlot.m in Sources */,
 				3EA3D6081771ED4500F20450 /* MACarouselItemView.m in Sources */,
+				3EA4D97D177E04D500FF2E19 /* MADataManager.m in Sources */,
+				3EA4D980177E1CCF00FF2E19 /* iCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

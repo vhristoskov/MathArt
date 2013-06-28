@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<array>
+	<string>x ** 2</string>
+	<string>(x + 1) / 5</string>
+	<string>x ** 2 + 4* x - 20</string>
+	<string>sin(6x)</string>
+	<string>x ** 3 + 2*x + 2</string>
+</array>
 </plist>
